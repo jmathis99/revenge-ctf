@@ -6,12 +6,20 @@
 #define READ 1
 #define WRITE 2
 #define DELETE 4
+#define APP_SHELL 8
+#define APP_CREATE 16
+
+struct guest
+{
+	
+}
 
 struct user
 {
-	char name[20];
-	char username[20];
-	char password[20];
+	char name[32];
+	char username[32];
+	char password[32];
+	char description[128];
 	int permissions;
 };
 
@@ -23,12 +31,17 @@ void print_user(struct user* usr)
 
 void chat()
 {
-
+	printf("Hello! I'm the Big Bala Bot (BBB)! How are you today?\n");
+	gets(NULL);
+	sleep(2000);
+	printf("Cool! I'm doing great! Nice weather we're having, isn't it?");
+	gets(NULL);
+	printf("I agree! Well, I've gotta go. Bye!");
 }
 
 void shell(struct user* usr)
 {
-	if usr->
+	if (usr->
 }
 
 int main()
