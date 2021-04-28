@@ -114,9 +114,9 @@ void chat(struct user* usr)
 
   char buf[128];
   printf("Hello") && printf(usr->username) && printf("! I'm the Big Bala Bot (BBB)! How are you today?\n");
-  // gets(buf); // gets is secure because we have a stack canary ^_^
+  gets(buf); // gets is secure because we have a stack canary ^_^
   printf("Cool! I'm doing great! Nice weather we're having, isn't it?\n");
-  // gets(buf);
+  gets(buf);
   printf("I agree! Well, I've gotta go write our cumulative final exam. Bye!\n");
 //  printf("MMOMMD&N&N&N@N@&DND&&&N&@O63sT{L}{]YTysz1}ivl1s3mRHBRRggQggggQWHQgQH\n
 //OMOMOOMOMD&@N&&&NNND&@0Y;.- -' ''-.. `'  ..-``  _<x9NWQHRBWBgHWHQgBQ\n
