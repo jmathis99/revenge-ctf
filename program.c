@@ -11,19 +11,11 @@
 // randomize password generation for superuser
 // reserve the bala username
 
-#define READ 1
-#define WRITE 2
-#define DELETE 4
-#define DETAILS 8
-#define APP_SHELL 16
-#define APP_CREATE 32
-#define BALA_BOT 3891 + 205
-
 struct user
 {
   char username[32];
   char password[32];
-  int permissions;
+  int admin;
   int wins;
   int losses;
   char description[128];
@@ -34,31 +26,34 @@ struct user* users[5] = {0};
 
 void create_user(struct user* usr)
 {
-  if (usr->permissions & APP_CREATE){
-    if(users[3])
-    {
-      printf("Error: Too Many Users\n");
-      return;
-    }
-    struct user* u = (struct user*)malloc(sizeof(struct user));
-    printf("Enter Username: ");
-    fgets(u->username, sizeof(u->username)-1, stdin);
-    if(!strncmp(u->username, "bala", 4)){
-      printf("Error: Invalid Username\n");
-      free(u);
-      return;
-    }
-    printf("Enter Password: ");
-    fgets(u->password, sizeof(u->password)-1, stdin);
-    printf("Enter Description: ");
-    fgets(u->description, sizeof(u->description)-1, stdin);
-    //fgets
+  if(users[3])
+  {
+    printf("Error: Too Many Users\n");
+    return;
   }
+  struct user* u = (struct user*)malloc(sizeof(struct user));
+  printf("Enter Username: ");
+  fgets(u->username, sizeof(u->username)-1, stdin);
+  if(!strncmp(u->username, "bala", 4)){
+    printf("Error: Invalid Username\n");
+    free(u);
+    return;
+  }
+  printf("Enter Password: ");
+  fgets(u->password, sizeof(u->password)-1, stdin);
+  printf("Enter Description: ");
+  fgets(u->description, sizeof(u->description)-1, stdin);
 }
 
 void change_description(struct user* usr) {
+  char new_desc[130]; // the extra few characters will get rid of those pesky newlines
+
   printf("Please enter your new description, %s.", usr->username);
-  fgets(usr->description, sizeof(usr->description), stdin);
+  // description_len will always be 128 right now, TODO: implement variable length description
+  fgets(usr->description, sizeof(new_desc), stdin);
+  strncpy(usr->description, new_desc, sizeof(new_desc));
+  printf("Description updated: %s\n", usr->description);
+  printf("Description length: %d", usr->description_len);
 }
 
 void print_user(struct user* usr)
@@ -76,17 +71,17 @@ void print_user_details(struct user* usr)
 
 void chat(struct user* usr)
 {
-  if(!(usr->permissions & BALA_BOT)){
+  if(!usr->admin){
     printf("We're sorry. The BALA_BOT is a high level research project that only authorized users can access. Please use our other services!");
     return;
   }
 
-  char buf[0x100];
-  printf("Hello! I'm the Big Bala Bot (BBB)! How are you today?\n");
-  fgets(buf, 0x100, stdin);
+  char buf[128];
+  printf("Hello") && printf(usr->username) && printf("! I'm the Big Bala Bot (BBB)! How are you today?\n");
+  gets(buf); // gets is secure because we have a stack canary ^_^
   printf("Cool! I'm doing great! Nice weather we're having, isn't it?\n");
-  fgets(buf, 0x100, stdin);
-  printf("I agree! Well, I've gotta go. Bye!\n");
+  gets(buf);
+  printf("I agree! Well, I've gotta go write our cumulative final exam. Bye!\n");
 //  printf("MMOMMD&N&N&N@N@&DND&&&N&@O63sT{L}{]YTysz1}ivl1s3mRHBRRggQggggQWHQgQH\n
 //OMOMOOMOMD&@N&&&NNND&@0Y;.- -' ''-.. `'  ..-``  _<x9NWQHRBWBgHWHQgBQ\n
 //MOMOMMMMOOOM@DNDDN&@h7 - .'.- .-`. '`.'-'    `.'``^)AHQgRQBHBQgWgRBB\n
@@ -117,12 +112,6 @@ void chat(struct user* usr)
 //ae#4e#4V4aa4#4#$XkXk$Z+ ' -` `.'`-:>*/ii}zjee59U0KMMMPuMYeDRBgHgHHRR\n
 //33a#aeIeeeI#34VVZ$XZZ5v.'   ` `. !,</i{1j4ZSS https://asciify.me WRB\n
 //2V333eIIV444#eII#XX5j+/.'   `-.  :_r/LYz#%GmMOMMMOD&NM$HHn -}6gBRWHH"); 
-}
-
-// for debugging only
-void shell(struct user* usr)
-{
-	system("/bin/sh");
 }
 
 struct user* login()
@@ -178,7 +167,7 @@ int tictactoe(struct user * usr)
 
 void details(struct user* usr)
 {
-  if(!(usr->permissions & DETAILS)){
+  if(!usr->admin){
     printf("ERROR: You do not have permission to use this function!\n");
     return;
   }
@@ -194,11 +183,13 @@ void details(struct user* usr)
   }
 }
 
-void list()
+void list(struct user * usr)
 {
-  for(int i = 0; i < 5; ++i){
-    if(users[i])
-      print_user(users[i]);
+  if(usr->admin){
+    for(int i = 0; i < 5; ++i){
+      if(users[i])
+        print_user(users[i]);
+    }
   }
 }
 
@@ -208,15 +199,20 @@ int main()
   strcpy(guest->username, "guest");
   strcpy(guest->password, "guest");
   strcpy(guest->description, "The Guest Account");
-  guest->description_len = strlen(guest->description);
-  guest->permissions = READ;
+  guest->description_len = 128;
+  guest->admin = 0;
+  guest->wins = 0;
+  guest->losses = 0;
   users[0] = guest;
 
   struct user* bala = (struct user*)malloc(sizeof(struct user));
   strcpy(bala->username, "bala");
   strcpy(bala->password, "password");
   strcpy(bala->description, "The Biggest Bala of them all");
-  bala->permissions = READ | WRITE | DELETE;
+  bala->description_len = 128;
+  bala->admin = 1;
+  bala->wins = 3891;
+  bala->losses = 0;
   users[4] = bala;
   
   // this high level feature disallows hackers from reading our secret password
@@ -248,7 +244,7 @@ int main()
     else if(!strncmp("4", input, 1))
       print_user_details(current_user);
     else if(!strncmp("5", input, 1))
-      list();
+      list(current_user);
     else if(!strncmp("6", input, 1))
       details(current_user);
     else if(!strncmp("7", input, 1))
