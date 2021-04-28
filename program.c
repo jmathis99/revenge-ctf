@@ -40,6 +40,19 @@ void create_user()
   //struct user* u = (struct user*)malloc(sizeof(struct user));
   struct user tmp = {0};
   struct user u;
+
+  int idx = -1;
+  for (int i = 0; i < 4; ++i) {
+    if (memcmp(&users[i], &tmp, sizeof(tmp)) == 0) {
+      idx = i;
+      break;
+    }
+  }
+  
+  if(idx == -1){
+    printf("Error: Too Many Users\n");
+    return;
+  }
   printf("Enter Username: ");
   fgets(u.username, sizeof(u.username)-1, stdin);
   if(!strncmp(u.username, "bala", 4)){
@@ -51,13 +64,7 @@ void create_user()
   printf("Enter Description: ");
   fgets(u.description, sizeof(u.description)-1, stdin);
   
-  for (int i = 0; i < 4; ++i) {
-    if (memcmp(&users[i], &tmp, sizeof(tmp)) == 0) {
-      users[i] = u;
-      return;
-    }
-  }
-  printf("Error: Too Many Users\n");
+  users[idx] = u;
 }
 
 // TODO: Fixme
