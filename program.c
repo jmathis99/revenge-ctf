@@ -37,7 +37,6 @@ struct user users[5] = {0};
 
 void create_user()
 {
-  //struct user* u = (struct user*)malloc(sizeof(struct user));
   struct user tmp = {0};
   struct user u;
 
@@ -55,14 +54,17 @@ void create_user()
   }
   printf("Enter Username: ");
   fgets(u.username, sizeof(u.username)-1, stdin);
+  printf("Username: %s\n", u.username);
   if(!strncmp(u.username, "bala", 4)){
     printf("Error: Invalid Username\n");
     return;
   }
   printf("Enter Password: ");
   fgets(u.password, sizeof(u.password)-1, stdin);
+  printf("Pass: %s", u.password);
   printf("Enter Description: ");
   fgets(u.description, sizeof(u.description)-1, stdin);
+  printf("Desc: %s", u.description);
   
   users[idx] = u;
 }
@@ -113,7 +115,7 @@ void chat(struct user* usr)
   }
 
   char buf[128];
-  printf("Hello") && printf(usr->username) && printf("! I'm the Big Bala Bot (BBB)! How are you today?\n");
+  printf("Hello ") && printf(usr->username) && printf("! I'm the Big Bala Bot (BBB)! How are you today?\n");
   gets(buf); // gets is secure because we have a stack canary ^_^
   printf("Cool! I'm doing great! Nice weather we're having, isn't it?\n");
   gets(buf);
@@ -279,7 +281,7 @@ int main()
     printf("9. Delete a user\n");
     printf("0. Create a new user\n");
     
-    fgets(input, sizeof(input)-1, stdin);
+    fgets(input, sizeof(input) - 1, stdin);
     if (!strncmp("1", input, 1))
       chat(current_user);
     else if(!strncmp("2", input, 1))
@@ -298,8 +300,14 @@ int main()
       return 0;
     else if(!strncmp("0", input, 1))
       create_user();
-    else
-      printf("Error: Invalid Choice!");
+    else{ 
+      printf("Error: Invalid Choice!\n");
+      printf("Input: %s", input);
+      return 0;
+    }
+
+    
+    memset(input, 0, 8);
   }
   
 	//print_user(users[1]);
