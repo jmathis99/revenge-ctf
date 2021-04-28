@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <unistd.h>
 //#include "passwords.h"
 
 // TODO:
@@ -10,6 +11,16 @@
 // chat function *edits*
 // randomize password generation for superuser
 // reserve the bala username
+
+
+/*
+Create 3 users
+Insert a negative number that is less than -128
+Update the description and make sure that you're overwriting the username and password of the admin user
+to something that you know
+Login as admin user
+Call chat
+*/
 
 struct user
 {
@@ -43,15 +54,36 @@ void create_user(struct user* usr)
   fgets(u->password, sizeof(u->password)-1, stdin);
   printf("Enter Description: ");
   fgets(u->description, sizeof(u->description)-1, stdin);
+  
+  for (int i = 0; i < 4; ++i) {
+    if (users[i] == NULL) {
+      users[i] = u;
+      return;
+    }
+  }
+}
+
+// TODO: Fixme
+void delete_user(struct user* user) {
+  for (int i = 0; i < 5; ++i) {
+    if (user == users[i]) {
+      users[i] = NULL;
+    }
+  }
+  memset(user, 0, sizeof(user));
+  free(user);
+  user = NULL;
 }
 
 void change_description(struct user* usr) {
-  char new_desc[130]; // the extra few characters will get rid of those pesky newlines
-
-  printf("Please enter your new description, %s.", usr->username);
-  // description_len will always be 128 right now, TODO: implement variable length description
-  fgets(usr->description, sizeof(new_desc), stdin);
-  strncpy(usr->description, new_desc, sizeof(new_desc));
+  char input[10];
+  printf("How long would you like your description to be? ");
+  fgets(input, 10, stdin);
+  usr->description_len = atoi(input);
+  if(usr->description_len > 128) usr->description_len = 128; //clip values to the size of the buffer
+  if(usr->description_len < 0) usr->description_len *= -1; //make sure there's no funny business with negatives
+  printf("Please enter your new description: ");
+  fgets(usr->description, usr->description_len, stdin);
   printf("Description updated: %s\n", usr->description);
   printf("Description length: %d", usr->description_len);
 }
@@ -139,7 +171,7 @@ struct user* login()
 
 int tictactoe(struct user * usr)
 {
-  printf("Welcome to Big Bala's Tic Tac Toe:\nHere's your board:\n");
+  printf("Welcome to Big Bala's Tic Tac Toe:\nHere's your board (BALABOT is X, you are O):\n");
   printf("   |   |   \n 0 | 1 | 2 \n   |   |   \n");
   printf("___________\n");
   printf("   |   |   \n 3 | 4 | 5 \n   |   |   \n");
@@ -159,9 +191,18 @@ int tictactoe(struct user * usr)
     printf("Tails -- You go second!\n");
   }
   
+  printf("The bot is deciding it's move...\n");
+  sleep(5);
   for(int i = 0; i < 9; ++i){
-    
+    printf("   |   |   \n X | X | X \n   |   |   \n");
+    printf("___________\n");
+    printf("   |   |   \n X | X | X \n   |   |   \n");
+    printf("___________\n");
+    printf("   |   |   \n X | X | X \n   |   |   \n");
+    break;
   }
+  printf("BALABOT Wins!!! Better luck next time!");
+  usr->losses++;
   return 0;
 }
 
@@ -234,6 +275,8 @@ int main()
     printf("6. View another user's Profile\n");
     printf("7. Log in as a different user\n");
     printf("8. Leave the Big Bala Entertainment Server\n");
+    printf("9. Delete a user\n");
+    printf("0. Create a new user\n");
     fgets(input, sizeof(input)-1, stdin);
     if(!strncmp("1", input, 1))
       chat(current_user);
@@ -251,6 +294,10 @@ int main()
       login();
     else if(!strncmp("8", input, 1))
       return 0;
+    else if(!strncmp("9", input, 1))
+      delete_user(current_user);
+    else if(!strncmp("0", input, 1))
+      create_user(current_user);
     else
       printf("Error: Invalid Choice!");
   }
