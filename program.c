@@ -170,7 +170,7 @@ int login()
   }
   mprotect(users[4].password, 32, PROT_WRITE);
   printf("Error: Incorrect Login. Logging in as guest...\n");
-  return 4;
+  return 0;
 }
 
 int tictactoe(struct user * usr)
@@ -230,11 +230,9 @@ void details(struct user* usr)
 
 void list(struct user * usr)
 {
-  if(usr->admin){
     for(int i = 0; i < 5; ++i){
       print_user(&users[i]);
     }
-  }
 }
 
 int main()
@@ -295,7 +293,7 @@ int main()
     else if(!strncmp("6", input, 1))
       details(current_user);
     else if(!strncmp("7", input, 1))
-      login();
+      current_user = &users[login()];
     else if(!strncmp("8", input, 1))
       return 0;
     else if(!strncmp("0", input, 1))
