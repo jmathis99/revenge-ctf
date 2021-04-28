@@ -35,7 +35,7 @@ struct user
 
 struct user users[5] = {0};
 
-void chat(struct user& usr)
+void chat(struct user &usr)
 {
   if(!usr.admin){
     printf("We're sorry. The BALA_BOT is a high level research project that only authorized users can access. Please use our other services!");
