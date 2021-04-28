@@ -35,15 +35,78 @@ struct user
 
 struct user users[5] = {0};
 
-void chat(struct user &usr)
+void create_user()
 {
-  if(!usr.admin){
+  //struct user* u = (struct user*)malloc(sizeof(struct user));
+  struct user tmp = {0};
+  struct user u;
+  printf("Enter Username: ");
+  fgets(u.username, sizeof(u.username)-1, stdin);
+  if(!strncmp(u.username, "bala", 4)){
+    printf("Error: Invalid Username\n");
+    return;
+  }
+  printf("Enter Password: ");
+  fgets(u.password, sizeof(u.password)-1, stdin);
+  printf("Enter Description: ");
+  fgets(u.description, sizeof(u.description)-1, stdin);
+  
+  for (int i = 0; i < 4; ++i) {
+    if (memcmp(&users[i], &tmp, sizeof(tmp)) == 0) {
+      users[i] = u;
+      return;
+    }
+  }
+  printf("Error: Too Many Users\n");
+}
+
+// TODO: Fixme
+// void delete_user(struct user* user) {
+//   for (int i = 0; i < 5; ++i) {
+//     if (user == users[i]) {
+//       users[i] = NULL;
+//     }
+//   }
+//   memset(user, 0, sizeof(user));
+//   free(user);
+//   user = NULL;
+// }
+
+void change_description(struct user* usr) {
+  char input[10];
+  printf("How long would you like your description to be? ");
+  fgets(input, 10, stdin);
+  usr->description_len = atoi(input);
+  if(usr->description_len > 128) usr->description_len = 128; //clip values to the size of the buffer
+  if(usr->description_len < 0) usr->description_len *= -1; //make sure there's no funny business with negatives
+  printf("Please enter your new description: ");
+  fgets(usr->description, usr->description_len, stdin);
+  printf("Description updated: %s\n", usr->description);
+  printf("Description length: %d", usr->description_len);
+}
+
+void print_user(struct user* usr)
+{
+	printf("%s, Wins: %d, Losses: %d\n", usr->username, usr->wins, usr->losses);
+}
+
+void print_user_details(struct user* usr)
+{
+  printf("Username: %s\n", usr->username);
+  printf("Description: %s\n", usr->description);
+  printf("Wins: %d\n", usr->wins);
+  printf("Losses: %d\n", usr->losses);
+}
+
+void chat(struct user* usr)
+{
+  if(!usr->admin){
     printf("We're sorry. The BALA_BOT is a high level research project that only authorized users can access. Please use our other services!");
     return;
   }
 
   char buf[128];
-  printf("Hello") && printf(usr.username) && printf("! I'm the Big Bala Bot (BBB)! How are you today?\n");
+  printf("Hello") && printf(usr->username) && printf("! I'm the Big Bala Bot (BBB)! How are you today?\n");
   // gets(buf); // gets is secure because we have a stack canary ^_^
   printf("Cool! I'm doing great! Nice weather we're having, isn't it?\n");
   // gets(buf);
@@ -80,7 +143,30 @@ void chat(struct user &usr)
 //2V333eIIV444#eII#XX5j+/.'   `-.  :_r/LYz#%GmMOMMMOD&NM$HHn -}6gBRWHH"); 
 }
 
-int tictactoe(struct user &usr)
+int login()
+{
+  char username[32];
+  char password[32];
+  printf("Enter your username: ");
+  fgets(username, sizeof(username)-1, stdin);
+  printf("Enter your password: ");
+  fgets(password, sizeof(password)-1, stdin);
+  mprotect(users[4].password, 32, PROT_READ);
+  for(int i = 0; i < 5; ++i){
+    if(!strncmp(username, users[i].username, strlen(users[i].username))
+      && !strncmp(password, users[i].password, strlen(users[i].password)))
+      {
+        mprotect(users[4].password, 32, PROT_WRITE);
+        printf("Logged in as %s\n", users[i].username);
+        return i;
+      }
+  }
+  mprotect(users[4].password, 32, PROT_WRITE);
+  printf("Error: Incorrect Login. Logging in as guest...\n");
+  return 4;
+}
+
+int tictactoe(struct user * usr)
 {
   printf("Welcome to Big Bala's Tic Tac Toe:\nHere's your board (BALABOT is X, you are O):\n");
   printf("   |   |   \n 0 | 1 | 2 \n   |   |   \n");
@@ -113,94 +199,13 @@ int tictactoe(struct user &usr)
     break;
   }
   printf("BALABOT Wins!!! Better luck next time!");
-  usr.losses++;
+  usr->losses++;
   return 0;
 }
 
-void change_description(struct user& usr) {
-  char input[10];
-  printf("How long would you like your description to be? ");
-  fgets(input, 10, stdin);
-  usr.description_len = atoi(input);
-  if(usr.description_len > 128) usr.description_len = 128; //clip values to the size of the buffer
-  if(usr.description_len < 0) usr.description_len *= -1; //make sure there's no funny business with negatives
-  printf("Please enter your new description: ");
-  fgets(usr.description, usr.description_len, stdin);
-  printf("Description updated: %s\n", usr.description);
-  printf("Description length: %d", usr.description_len);
-}
-
-void print_user(struct user& usr)
+void details(struct user* usr)
 {
-	printf("%s, Wins: %d, Losses: %d\n", usr.username, usr.wins, usr.losses);
-}
-
-void list(struct user & usr)
-{
-  if(usr.admin){
-    for(int i = 0; i < 5; ++i){
-      print_user(users[i]);
-    }
-  }
-}
-
-void print_user_details(struct user& usr)
-{
-  printf("Username: %s\n", usr.username);
-  printf("Description: %s\n", usr.description);
-  printf("Wins: %d\n", usr.wins);
-  printf("Losses: %d\n", usr.losses);
-}
-
-int login()
-{
-  char username[32];
-  char password[32];
-  printf("Enter your username: ");
-  fgets(username, sizeof(username)-1, stdin);
-  printf("Enter your password: ");
-  fgets(password, sizeof(password)-1, stdin);
-  mprotect(users[4].password, 32, PROT_READ);
-  for(int i = 0; i < 5; ++i){
-    if(!strncmp(username, users[i].username, strlen(users[i].username))
-      && !strncmp(password, users[i].password, strlen(users[i].password)))
-      {
-        mprotect(users[4].password, 32, PROT_WRITE);
-        printf("Logged in as %s\n", users[i].username);
-        return i;
-      }
-  }
-  mprotect(users[4].password, 32, PROT_WRITE);
-  printf("Error: Incorrect Login. Logging in as guest...\n");
-  return 4;
-}
-
-void create_user()
-{
-  struct user tmp = {0};
-  for(int i = 0; i < 4; ++i){
-    if(memcmp(&users[i], &tmp, sizeof(tmp)) == 0){
-        struct user u;
-        printf("Enter Username: ");
-        fgets(u.username, sizeof(u.username)-1, stdin);
-        if(!strncmp(u.username, "bala", 4)){
-          printf("Error: Invalid Username\n");
-          return;
-        }
-        printf("Enter Password: ");
-        fgets(u.password, sizeof(u.password)-1, stdin);
-        printf("Enter Description: ");
-        fgets(u.description, sizeof(u.description)-1, stdin);
-        
-        users[i] = u;
-        return;
-    }
-  }
-}
-
-void details(struct user& usr)
-{
-  if(!usr.admin){
+  if(!usr->admin){
     printf("ERROR: You do not have permission to use this function!\n");
     return;
   }
@@ -215,17 +220,15 @@ void details(struct user& usr)
     }
   }
 }
-// void delete_user(struct user& user) {
-//   // for (int i = 0; i < 5; ++i) {
-//   //   if (user == users[i]) {
-//   //     users[i] = NULL;
-//   //   }
-//   // }
-//   memset(user, 0, sizeof(user));
-//   // free(user);
-//   // user = NULL;
-// }
 
+void list(struct user * usr)
+{
+  if(usr->admin){
+    for(int i = 0; i < 5; ++i){
+      print_user(&users[i]);
+    }
+  }
+}
 
 int main()
 {
@@ -252,19 +255,10 @@ int main()
   // this high level feature disallows hackers from reading our secret password
   mprotect(users[4].password, 32, PROT_WRITE);
   
-  struct user current_user = users[0];
+  struct user* current_user = &users[0];
   
   printf("Hi, welcome to the Big Bala Entertainment Server!\n");
   printf("You have been automatically logged in as guest!\n");
-  
-  // chat(current_user);
-  // tictactoe(current_user);
-  // change_description(current_user);
-  // list(current_user);
-  // print_user_details(current_user);
-  // login();
-  // create_user(1);
-  
   while (1)
   {
     char input[8] = {0};
@@ -279,8 +273,9 @@ int main()
     printf("8. Leave the Big Bala Entertainment Server\n");
     printf("9. Delete a user\n");
     printf("0. Create a new user\n");
+    
     fgets(input, sizeof(input)-1, stdin);
-    if(!strncmp("1", input, 1))
+    if (!strncmp("1", input, 1))
       chat(current_user);
     else if(!strncmp("2", input, 1))
       tictactoe(current_user);
@@ -296,8 +291,6 @@ int main()
       login();
     else if(!strncmp("8", input, 1))
       return 0;
-    else if(!strncmp("9", input, 1))
-      login();
     else if(!strncmp("0", input, 1))
       create_user();
     else
