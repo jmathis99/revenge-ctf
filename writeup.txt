@@ -1,0 +1,21 @@
+Reverse Engineering CTF Final Project
+Lu Cao, Joey Mathis, Rong Wang
+
+Our group created a multi-part CTF project. The script that was written revolves around a game service where the user interacts
+with a robot called BALA BOT. The goal of the project is to call the flag() function which will print a nice surprise for the user.
+
+Part 1
+The first part of the exploit is to realize that there is an error within the change description function. The way the programs
+deals with negative lengths is incorrect. When a negative length is entered, the function will simply multiply the length by the
+negative number and not bounds check the result. Thus, we can change the description length to be longer 128 bytes. The next thing
+to notice is that there is an array that stores 5 user objects and that these users are located in contiguous memory. Furthermore, 
+the admin user is always the 4th user in the array. Thus, if we can overwrite the description length, we can overflow the description
+buffer of the 3rd user and change the admin password to something we know.
+
+Part 2
+Once we overwrite the admin password, we can call the login() function to log back in as the admin with the new password. If we look
+at what other functions are available to us, we see that there is a chat() function that allows the user to interact with the
+BALA BOT. Interacting with the BALA BOT requires admin privileges. Since we are now the admin user, we can do this. Notice that 
+the BALA BOT gets user input using the gets() function. As we have learned, gets() is not secure because it does not check the length
+of the user input. Thus, we can overflow the local buffer buf, which is stored on the stack, and overwrite the return address of chat()
+so that execution goes to the flag() function. 
