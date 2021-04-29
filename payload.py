@@ -1,3 +1,4 @@
+# use python3
 print("0")
 print("user1")
 print("user1")
@@ -34,4 +35,5 @@ print("bala")
 print("pass1234")
 
 print("1")
-
+print()
+print('A' * 100 + 'BBBBBB')
