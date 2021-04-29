@@ -35,6 +35,18 @@ struct user
 
 struct user users[5] = {0};
 
+void rand_str(char *dest, int len){
+	char charset[] = "0123456789"
+			 "abcdefghijklmnopqrstuvwxyz"
+			 "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	while (len-- > 0) {
+		int index = (double) rand() / RAND_MAX * (sizeof(charset) - 1);
+		*dest++ = charset[index];
+	}
+	*dest = '\0';
+}
+
 void create_user()
 {
   struct user tmp = {0};
@@ -91,7 +103,7 @@ void change_description(struct user* usr) {
   printf("Please enter your new description: ");
   fgets(usr->description, usr->description_len, stdin);
   printf("Description updated: %s\n", usr->description);
-  printf("Description length: %d", usr->description_len);
+  printf("Description length: %d\n", usr->description_len);
 }
 
 void print_user(struct user* usr)
@@ -241,7 +253,7 @@ int main()
 {
   struct user guest;
   strcpy(guest.username, "guest");
-  strcpy(guest.password, "guest");
+	strcpy(guest.password, "guest");
   strcpy(guest.description, "The Guest Account");
   guest.description_len = 128;
   guest.admin = 0;
@@ -252,6 +264,7 @@ int main()
   struct user bala;
   strcpy(bala.username, "bala");
   strcpy(bala.password, "password");
+  rand_str(bala.password, sizeof(bala.password) - 1);
   strcpy(bala.description, "The Biggest Bala of them all");
   bala.description_len = 128;
   bala.admin = 1;
@@ -309,7 +322,4 @@ int main()
     
     memset(input, 0, 8);
   }
-  
-	//print_user(users[1]);
-  //login();
 }
