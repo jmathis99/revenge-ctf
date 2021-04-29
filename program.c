@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include "passwords.h"
 
+// Note the goal of this CTF is to call the flag() function that is stored within passwords.h (hidden). This will print the flag!
+
 // gcc -fno-stack-protector -no-pie
 
 // TODO:
