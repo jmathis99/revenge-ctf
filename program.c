@@ -3,7 +3,7 @@
 #include <string.h>
 #include <sys/mman.h>
 #include <unistd.h>
-//#include "passwords.h"
+#include "passwords.h"
 
 // gcc -fno-stack-protector -no-pie
 
@@ -81,41 +81,6 @@ void create_user()
   printf("Desc: %s", u.description);
   
   users[idx] = u;
-}
-
-void flag() {
-	 char * flag = "MMOMMD&N&N&N@N@&DND&&&N&@O63sT{L}{]YTysz1}ivl1s3mRHBRRggQggggQWHQgQH\n"
-"OMOMOOMOMD&@N&&&NNND&@0Y;.- -' ''-.. `'  ..-``  _<x9NWQHRBWBgHWHQgBQ\n"
-"MOMOMMMMOOOM@DNDDN&@h7 - .'.- .-`. '`.'-'    `.'``^)AHQgRQBHBQgWgRBB\n"
-"MOOMOMOMOMOOMOD&D&9v. `--'-'.'` . `!::<'//|//r:`' ,?mNWRHHgHWWBRWgWg\n"
-"OOOOOOMOMMMOMOMOMF^ .'-.--~_,^_><;|ii}YyzyfFIIejY>  ,}KgQRWQBgHBBBRQ\n"
-"OMOMOMOMMOMMMOMO1-` . _>+*;==|)|?v}}[1zjoJn4$ZwEAEs<'-:JWQQHBRBQggWH\n"
-"0bbUbpOMMMMOMOdv-. ._>;r';;r/vvvi{Y1YfueI#$5wUqbppp9c^-=MHQBRgggHHBR\n"
-"UdUm0qGGOOMMOOi - -<>=;+<*'==|vi[}Y1yz2F45$P08qM08MM9t:>mRQQWRHWRHgH\n"
-"m8Um08K80dKbUE`'-  :<><+>;'*r)/ixcTyysysn#XhE8qUKGMMMwc<4gggRBBRRQRB\n"
-"UKUbdp8p0dppKY- ''''^!<+++**r)?v{11yfsn24a$w~SmEXkSMMO5=1gBgHWWRHHWB\n"
-"0d6mUKpqUmpK0/.  `.~::_,::,!!^><'|L1oua#k#J1[ivi//|vXMMo}gRQBWQRQBQR\n"
-"0ShSE%qdUbG8K; -'`^_:! `-..` .- ` <ls4hUwYv//)/{146U56OUiWggWBWQHWgH\n"
-"06SPwEhwG0Gmq*`''.,,~- '`--~~^ `` '+(YpOO%IT*!_>(YI$ON@OiGO&RQRHQBgQ\n"
-"SwhSSS%hwAE9Av   _^^! .`'` .   . ''`,?XO8ai~,'--v6tnPM@@kuOMWBWBRBHH\n"
-"k$h6P6SAASX>_!. .~,~^,'. ''-'.__..'-^(zSUCi<!!>iCP0GAGMNN0O$DRRRRgBg\n"
-"Z5$5$X$%6P$~,:-.-_^,<+++!_^:,!,~,.^!+|zhOUkCYl1YfeZ6mM&@N@&MHgWgHWgB\n"
-"$k$kZ$5$kEXr^_-` ^,:>>+;=)/||=r>>!,~>)TeGmqbd/5$Xh8qOODD@jSDBHQHHQRR\n"
-"Z5$5$kXkZXho<!`_^:,__>++;|/vv|r>,~:^>;T#UMhSPVJCkwdONW@gO8ORRWBRHQRB\n"
-"kZZ55XZ$$X55J+^!--^^^^:<;|]Yf1(,`~>~^'TeGMmdb6#T]J$O&D@QDNHWRQQWRWHR\n"
-"ZXX5$k$XkXk56$i!!_!^__::rvYYl+,^:'`' _vCZ/AXw9UXJT{ZOND&&RgRQBQgHRHQ\n"
-"ZZ$Xkk$5Z$$X$Z$Tvvl!-- !r)v/<^``'-  _<vvlukS6K%kjL=IM&NDRRWQQWRBQQRW\n"
-"kI$Z$XkkkkZ$$5k//9P*`--`^>i/~.   ``,,<;(]sC#4o#ZY|Tp@DNDHBBRWgRBQgWg\n"
-"a433XkZkZ5$$Z$55hShf.  -`^<*^~~_,! ,<rvYz3AmOMmwJoeMMMNNBHBWWWQWQQQg\n"
-"#4e#VV#XZ5X5$5k5k$Ehc'..`  _,  !+<+!>*?iTu$pUbA5ZEKMOO&WBBWRQgBQWQQR\n"
-"a3e3eIa$55kkZ$kXXXXS5>'`.`'-'. -!++><<*?1ta5$$APGpdUODBBWBHHRgHHHQWW\n"
-"eVIeaVI3#eIXZ55Z$kXXEv`   '''' '`-:!+r/iYCk$XUdbGUppMNWQHQHWQQHHQQgH\n"
-"IeII4I4e4#3#$Z5XZkX5$j`  '  ..' -.`!+?{c1I9Shw6EE/UM@p&HHHBRgQQQBRWH\n"
-"ae#4e#4V4aa4#4#$XkXk$Z+ ' -` `.'`-:>*/ii}zjee59U0KMMMPuMYeDRBgHgHHRR\n"
-"33a#aeIeeeI#34VVZ$XZZ5v.'   ` `. !,</i{1j4ZSS https://asciify.me WRB\n"
-"2V333eIIV444#eII#XX5j+/.'   `-.  :_r/LYzz/GmMOMMMOD&NM$HHn -}6gBRWHH";
-	printf("%s\n", flag);
-	printf("Congrats you have successfully captured the flag!\n");
 }
 
 // TODO: Fixme
