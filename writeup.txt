@@ -5,6 +5,10 @@ Our group created a multi-part CTF project. The script that was written revolves
 with a robot called BALA BOT. The user begins as the guest user. The goal of the project is to call the flag() function which will
 print a nice surprise for the user.
 
+Included Files: program, program.c, payload.py, passwords.h
+It would be our intention to give the CTF player program and program.c, as passwords.h contains the flag.
+This project is also hosted at https://github.com/jmathis99/revenge-ctf. 
+
 Part 1
 The first part of the exploit is to realize that there is an error within the change_description() function. The way the programs
 deals with negative lengths is incorrect. When a negative length is entered, the function will simply multiply the length by the
