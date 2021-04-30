@@ -1,5 +1,3 @@
-#define JOEY_PASSWORD "password"
-
 void flag() {
 	 char * flag = "MMOMMD&N&N&N@N@&DND&&&N&@O63sT{L}{]YTysz1}ivl1s3mRHBRRggQggggQWHQgQH\n"
 "OMOMOOMOMD&@N&&&NNND&@0Y;.- -' ''-.. `'  ..-``  _<x9NWQHRBWBgHWHQgBQ\n"
