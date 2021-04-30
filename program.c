@@ -9,23 +9,6 @@
 
 // gcc -fno-stack-protector -no-pie
 
-// TODO:
-// compile as nopie
-// tic tac toe
-// chat function *edits*
-// randomize password generation for superuser
-// reserve the bala username
-
-
-/*
-Create 3 users
-Insert a negative number that is less than -128
-Update the description and make sure that you're overwriting the username and password of the admin user
-to something that you know
-Login as admin user
-Call chat
-*/
-
 struct user
 {
   char username[32];
@@ -84,18 +67,6 @@ void create_user()
   
   users[idx] = u;
 }
-
-// TODO: Fixme
-// void delete_user(struct user* user) {
-//   for (int i = 0; i < 5; ++i) {
-//     if (user == users[i]) {
-//       users[i] = NULL;
-//     }
-//   }
-//   memset(user, 0, sizeof(user));
-//   free(user);
-//   user = NULL;
-// }
 
 void change_description(struct user* usr) {
   char input[10];
