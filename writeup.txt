@@ -10,12 +10,12 @@ It would be our intention to give the CTF player program and program.c, as passw
 This project is also hosted at https://github.com/jmathis99/revenge-ctf. 
 
 Part 1
-The first part of the exploit is to realize that there is an error within the change_description() function. The way the programs
+The first part of the exploit is to realize that there is an error within the change_description() function. The way the program
 deals with negative lengths is incorrect. When a negative length is entered, the function will simply multiply the length by the
 negative number and not bounds check the result. Thus, we can change the description length to be longer 128 bytes. The next thing
 to notice is that there is an array that stores 5 user objects and that these users are located in contiguous memory. Furthermore, 
 the admin user is always the 4th user in the array. Admin privileges are not required to make users. Thus, as the guest, we can make
-three users and then login as the third user. From there, we can overwrite the description length of the third user which allows us to 
+three users and then login as the 3rd user. From there, we can overwrite the description length of the 3rd user which allows us to 
 overflow the description buffer of the 3rd user and change the admin password to something we know.
 
 Part 2
